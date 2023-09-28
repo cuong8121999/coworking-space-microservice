@@ -18,8 +18,6 @@ spec:
       - name: analytics-app
         image: 547318948247.dkr.ecr.us-east-1.amazonaws.com/coworking-space-microservice:8
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
         livenessProbe:
           httpGet:
             path: /health_check
@@ -50,5 +48,5 @@ spec:
             configMapKeyRef:
               name: db-env
               key: DB_HOST
-              
+
       restartPolicy: Always
