@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: analytics-app
-        image: DOCKER_REPOSITORY_ORG/DOCKER_IMAGE_NAME:VERSION_TAG
+        image: 547318948247.dkr.ecr.us-east-1.amazonaws.com/coworking-space-microservice:8
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         livenessProbe:
@@ -32,20 +33,22 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 5
         env:
-        - name: DOCKER_REPOSITORY_ORG
+        - name: DB_USERNAME
           valueFrom:
             configMapKeyRef:
-              name: app-config
-              key: DOCKER_REPOSITORY_ORG
+              name: db-env
+              key: DB_USERNAME
         
-        - name: DOCKER_IMAGE_NAME
+        - name: DB_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: DOCKER_IMAGE_NAME
+            secretKeyRef:
+              name: db-secret
+              key: DB_PASSWORD
         
-        - name: VERSION_TAG
+        - name: DB_HOST
           valueFrom:
             configMapKeyRef:
-              name: app-config
-              key: VERSION_TAG
+              name: db-env
+              key: DB_HOST
+              
+      restartPolicy: Always
