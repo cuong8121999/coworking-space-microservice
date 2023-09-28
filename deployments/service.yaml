@@ -4,8 +4,9 @@ metadata:
   name: analytics-app
 spec:
   selector:
-    app: analytics-app
+    app.kubernetes.io/name: example
   ports:
-  - name: http
-    port: 80
-    targetPort: 5000
+  - name: "5050"
+    protocol: TCP
+    port: 5050
+    targetPort: 5050

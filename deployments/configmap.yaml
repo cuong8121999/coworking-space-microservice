@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  DOCKER_REPOSITORY_ORG: "mysql://db-server:3306/mydb"
+  DOCKER_IMAGE_NAME: "your-api-key"
+  VERSION_TAG: 

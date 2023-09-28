@@ -1,19 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app
+  name: analytics-app
+  labels:
+    name: analytics-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-app
+      service: analytics-app
   template:
     metadata:
       labels:
-        app: flask-app
+        service: analytics-app
     spec:
       containers:
-        - name: flask-app
-          image: flask-app:latest
-          ports:
-        - containerPort: 5000
+      - name: analytics-app
+        image: DOCKER_REPOSITORY_ORG/DOCKER_IMAGE_NAME:VERSION_TAG
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /health_check
+            port: 5050
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: "/readiness_check"
+            port: 5050
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        env:
+        - name: DOCKER_REPOSITORY_ORG
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DOCKER_REPOSITORY_ORG
+        
+        - name: DOCKER_IMAGE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DOCKER_IMAGE_NAME
+        
+        - name: VERSION_TAG
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: VERSION_TAG
